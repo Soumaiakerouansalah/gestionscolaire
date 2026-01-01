@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Élève</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Ajouter Élève</h2>
+
+    <form th:action="@{/eleves/save}" th:object="${eleve}" method="post">
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="mb-3">
+            <label>Nom</label>
+            <input class="form-control" th:field="*{nom}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Prénom</label>
+            <input class="form-control" th:field="*{prenom}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Filière</label>
+            <select id="filiereSelect" class="form-select" th:field="*{filiere.id}" required>
+                <option value="">-- Choisir --</option>
+                <option th:each="f : ${filieres}"
+                        th:value="${f.id}"
+                        th:text="${f.nom}">
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Cours suivis</label>
+            <select id="coursSelect" name="coursIds" multiple class="form-select">
+            </select>
+        </div>
+
+        <button class="btn btn-success">Enregistrer</button>
+    </form>
+</div>
+
+<script>
+document.getElementById("filiereSelect").addEventListener("change", function () {
+    const id = this.value;
+    const select = document.getElementById("coursSelect");
+    select.innerHTML = "";
+
+    if (!id) return;
+
+    fetch("/cours/by-filiere/" + id)
+        .then(r => r.json())
+        .then(data => {
+            data.forEach(c => {
+                const opt = document.createElement("option");
+                opt.value = c.id;
+                opt.textContent = c.intitule;
+                select.appendChild(opt);
+            });
+        });
+});
+</script>
+
+</body>
+</html>
