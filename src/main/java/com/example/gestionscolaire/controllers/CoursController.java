@@ -15,6 +15,7 @@ import com.example.gestionscolaire.entities.Cours;
 import com.example.gestionscolaire.entities.Eleve;
 import com.example.gestionscolaire.repositories.CoursRepository;
 import com.example.gestionscolaire.repositories.FiliereRepository;
+import com.example.gestionscolaire.services.CoursService;
 
 import org.springframework.ui.Model;
 
@@ -22,12 +23,15 @@ import org.springframework.ui.Model;
 @RequestMapping("/cours")
 public class CoursController {
 
-    @Autowired private CoursRepository coursRepo;
-    @Autowired private FiliereRepository filiereRepo;
+    @Autowired
+    private CoursService coursService;
+
+    @Autowired
+    private FiliereRepository filiereRepo;
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("cours", coursRepo.findAll());
+        model.addAttribute("cours", coursService.findAll());
         return "cours/list";
     }
 
@@ -38,51 +42,38 @@ public class CoursController {
         return "cours/form";
     }
 
-  @PostMapping("/save")
-public String save(
-        @ModelAttribute Cours cours,
-        Model model
-) {
+    @PostMapping("/save")
+    public String save(@ModelAttribute Cours cours, Model model) {
 
-    // 🔴 Vérifier si le code existe déjà (cas ajout ou modification)
-    boolean codeExiste = coursRepo.existsByCode(cours.getCode());
+        boolean codeExiste = coursService.existsByCode(cours.getCode());
 
-    if (codeExiste && cours.getId() == null) {
-        model.addAttribute("error", "❌ Ce code de cours existe déjà");
-        model.addAttribute("cours", cours);
-        model.addAttribute("filieres", filiereRepo.findAll());
-        return "cours/form"; // ⚠️ rester sur le formulaire
+        if (codeExiste && cours.getId() == null) {
+            model.addAttribute("error", "❌ Ce code de cours existe déjà");
+            model.addAttribute("cours", cours);
+            model.addAttribute("filieres", filiereRepo.findAll());
+            return "cours/form";
+        }
+
+        coursService.save(cours);
+        return "redirect:/cours";
     }
 
-    coursRepo.save(cours);
-    return "redirect:/cours";
-}
-
-
     @GetMapping("/edit/{id}")
-public String edit(@PathVariable Long id, Model model) {
-    model.addAttribute("cours", coursRepo.findById(id).orElseThrow());
-    model.addAttribute("filieres", filiereRepo.findAll());
-    return "cours/form";
-}
+    public String edit(@PathVariable Long id, Model model) {
+        model.addAttribute("cours", coursService.findById(id));
+        model.addAttribute("filieres", filiereRepo.findAll());
+        return "cours/form";
+    }
 
-@GetMapping("/delete/{id}")
-public String delete(@PathVariable Long id) {
-
-    coursRepo.deleteById(id);
-
-    return "redirect:/cours";
-}
-
-
-
-    public CoursController(CoursRepository coursRepo) {
-        this.coursRepo = coursRepo;
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        coursService.deleteById(id);
+        return "redirect:/cours";
     }
 
     @GetMapping("/by-filiere/{id}")
     @ResponseBody
     public List<Cours> getCoursByFiliere(@PathVariable Long id) {
-        return coursRepo.findByFiliereId(id);
+        return coursService.findByFiliereId(id);
     }
 }

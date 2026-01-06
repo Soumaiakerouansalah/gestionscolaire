@@ -65,4 +65,31 @@ public void saveEleve(Eleve eleve, List<Long> coursIds) {
     eleveRepo.save(eleve);
 }
 
+
+
+ // 🔹 Liste des élèves
+    public List<Eleve> findAll() {
+        return eleveRepo.findAll();
+    }
+
+    // 🔹 Trouver par id
+    public Eleve findById(Long id) {
+        return eleveRepo.findById(id).orElseThrow();
+    }
+
+    public void deleteById(Long id) {
+        eleveRepo.deleteById(id);
+    }
+
+
+    public void updateEleve(Eleve eleve) {
+
+        Eleve existing = eleveRepo.findById(eleve.getId())
+                .orElseThrow();
+
+        existing.setNom(eleve.getNom());
+        existing.setPrenom(eleve.getPrenom());
+
+        eleveRepo.save(existing);
+    }
 }
