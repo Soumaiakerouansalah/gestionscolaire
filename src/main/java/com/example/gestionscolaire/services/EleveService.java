@@ -67,12 +67,12 @@ public void saveEleve(Eleve eleve, List<Long> coursIds) {
 
 
 
- // 🔹 Liste des élèves
+
     public List<Eleve> findAll() {
         return eleveRepo.findAll();
     }
 
-    // 🔹 Trouver par id
+
     public Eleve findById(Long id) {
         return eleveRepo.findById(id).orElseThrow();
     }

@@ -10,13 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.example.gestionscolaire.entities.Cours;
-import com.example.gestionscolaire.entities.Eleve;
-import com.example.gestionscolaire.repositories.CoursRepository;
 import com.example.gestionscolaire.repositories.FiliereRepository;
 import com.example.gestionscolaire.services.CoursService;
-
 import org.springframework.ui.Model;
 
 @Controller

@@ -17,22 +17,21 @@ public class FiliereService {
         this.filiereRepo = filiereRepo;
     }
 
-    // 🔹 Lister toutes les filières
+   
     public List<Filiere> findAll() {
         return filiereRepo.findAll();
     }
 
-    // 🔹 Sauvegarder une filière
     public Filiere save(Filiere filiere) throws DataIntegrityViolationException {
         return filiereRepo.save(filiere);
     }
 
-    // 🔹 Trouver par id
+ 
     public Filiere findById(Long id) {
         return filiereRepo.findById(id).orElseThrow();
     }
 
-    // 🔹 Supprimer
+
     public void deleteById(Long id) {
         filiereRepo.deleteById(id);
     }

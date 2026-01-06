@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.example.gestionscolaire.entities.Cours;
 import com.example.gestionscolaire.entities.Eleve;
 import com.example.gestionscolaire.repositories.CoursRepository;
 import com.example.gestionscolaire.repositories.EleveRepository;
